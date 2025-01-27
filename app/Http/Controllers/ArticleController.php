@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\ArticleInterface;
+use App\Services\ArticleService;
+use http\Client\Curl\User;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
-    protected ArticleInterface $articleService;
+    protected ArticleService $articleService;
 
-    public function __construct(ArticleInterface $articleService)
+    public function __construct(ArticleService $articleService)
     {
         $this->articleService = $articleService;
     }
@@ -34,10 +35,19 @@ class ArticleController extends Controller
 
     public function personalizedFeed(Request $request)
     {
+        $user = $request->user();
+
+        if ($user->userPreferences->isEmpty()) {
+            return response()->json([
+                'message' => 'No preferences found for this user.',
+            ], 404);
+        }
+
         $preferences = [
-            'source_id' => $request->user()->preferences->source_id ?? null,
-            'category_id' => $request->user()->preferences->category_id ?? null,
+            'source_id' => $user->userPreferences->first()->source_id,
+            'category_id' => $user->userPreferences->first()->category_id,
         ];
+
         $articles = $this->articleService->getPersonalizedFeed($preferences);
         return response()->json($articles);
     }

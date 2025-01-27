@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\UserPreferenceInterface;
+use App\Services\UserPreferenceService;
 use Illuminate\Http\Request;
 
 class UserPreferenceController extends Controller
 {
-    protected UserPreferenceInterface $userPreferenceService;
+    protected UserPreferenceService $userPreferenceService;
 
-    public function __construct(UserPreferenceInterface $userPreferenceService)
+    public function __construct(UserPreferenceService $userPreferenceService)
     {
         $this->userPreferenceService = $userPreferenceService;
     }

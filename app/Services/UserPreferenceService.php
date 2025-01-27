@@ -11,7 +11,7 @@ class UserPreferenceService implements UserPreferenceInterface
     {
         return UserPreference::updateOrCreate(
             ['user_id' => $userId],
-            ['source_id' => $sourceId, 'category_id' => $categoryId]
+            ['source_id' => $sourceId,'category_id' => $categoryId]
         );
     }
 
