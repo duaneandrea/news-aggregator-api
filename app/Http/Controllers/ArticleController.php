@@ -18,6 +18,7 @@ class ArticleController extends Controller
     public function index(Request $request)
     {
         $articles = $this->articleService->getArticles($request->only(['source_id', 'category_id', 'date']));
+        $articles->load(['source','category']);
         return response()->json($articles);
     }
 
@@ -49,6 +50,7 @@ class ArticleController extends Controller
         ];
 
         $articles = $this->articleService->getPersonalizedFeed($preferences);
+        $articles->load(['source','category']);
         return response()->json($articles);
     }
 }
